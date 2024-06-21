@@ -12,16 +12,12 @@ export class ExceptionFilter implements NestExceptionFilter {
                 ? exception.getStatus()
                 : HttpStatus.INTERNAL_SERVER_ERROR;
 
-        const message =
-            exception instanceof HttpException
-                ? exception.getResponse()
-                : { message: (exception as any).message || 'Internal server error' };
 
         response.status(status).json({
-            statusCode: status,
+            status: 'failed',
             timestamp: new Date().toISOString(),
             path: request.url,
-            message,
+            data:null
         });
     }
 }
