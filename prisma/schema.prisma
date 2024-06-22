@@ -1,0 +1,96 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id             String          @id @default(uuid())
+  fullName       String
+  email          String          @unique
+  password       String
+  createdAt      DateTime        @default(now())
+  updateAt       DateTime        @updatedAt
+  role           Roles           @default(User)
+  cart           Cart[]
+  forgotPassword forgotPassword?
+}
+
+model Plant {
+  id          String       @id @default(uuid())
+  color       PotColors    @default(White)
+  potSize     PotSizes     @default(medium)
+  title       String
+  description String
+  collection  Collection[]
+  createdAt   DateTime     @default(now())
+  updatedAt   DateTime     @updatedAt
+  cartItems   CartItem[]
+}
+
+model Collection {
+  id        String   @id @default(uuid())
+  title     String
+  species   String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  plantId   String
+  plant     Plant    @relation(fields: [plantId], references: [id])
+}
+
+model Cart {
+  id        String     @id @default(uuid())
+  userId    String
+  user      User       @relation(fields: [userId], references: [id])
+  items     CartItem[]
+  createdAt DateTime   @default(now())
+  updatedAt DateTime   @updatedAt
+}
+
+model CartItem {
+  id        String   @id @default(uuid())
+  quantity  Int
+  plantId   String
+  plant     Plant    @relation(fields: [plantId], references: [id])
+  cartId    String
+  cart      Cart     @relation(fields: [cartId], references: [id])
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model forgotPassword {
+  id         String   @id @default(uuid())
+  userId     String   @unique
+  User       User     @relation(fields: [userId], references: [id])
+  resetToken String
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+}
+
+enum PotSizes {
+  small
+  medium
+  large
+}
+
+enum PotColors {
+  White
+  Black
+  Green
+  Red
+  Blue
+}
+
+enum Roles {
+  Admin
+  User
+}
