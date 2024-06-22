@@ -3,7 +3,7 @@ import { AppService } from './app.service';
 import { CookieModule } from './core/cookie';
 import {ConfigModule} from "./core/config";
 import { AuthModule } from './app/auth';
-import { UsersModule } from './app/users/users.module';
+import { UsersModule } from './app/users';
 
 @Module({
   imports: [ CookieModule, AuthModule, ConfigModule, UsersModule],

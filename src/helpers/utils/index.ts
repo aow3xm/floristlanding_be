@@ -1,4 +1,4 @@
-export namespace Utility  {
+export namespace Utils  {
     export const generateRandomString = (length: number): string => {
         const alphanumericCharacters =
             'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
@@ -12,5 +12,10 @@ export namespace Utility  {
         }
 
         return result;
+    }
+
+    export enum PrismaError{
+        UniqueConstaintFailed = 'P2002',
+        RecordDoesNotExist = 'P2025'
     }
 }
