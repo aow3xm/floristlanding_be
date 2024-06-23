@@ -1,12 +1,13 @@
-import { Module } from '@nestjs/common';
-import { AppService } from './app.service';
-import { CookieModule } from './core/cookie';
+import {Module} from '@nestjs/common';
+import {AppService} from './app.service';
+import {CookieModule} from './core/cookie';
 import {ConfigModule} from "./core/config";
-import { AuthModule } from './app/auth';
-import { UsersModule } from './app/users';
+import {AuthModule} from './app/auth';
+import {UsersModule} from './app/users';
 
 @Module({
-  imports: [ CookieModule, AuthModule, ConfigModule, UsersModule],
-  providers: [AppService],
+    imports: [CookieModule, AuthModule, ConfigModule, UsersModule],
+    providers: [AppService],
 })
-export class AppModule {}
+export class AppModule {
+}

@@ -20,7 +20,7 @@ export namespace FileHelper {
 
     export const deleteFolder = (folderPath: string): Promise<void> => {
         return new Promise((resolve, reject) => {
-            fs.rm(folderPath, { recursive: true, force: true }, (err) => {
+            fs.rm(folderPath, {recursive: true, force: true}, (err) => {
                 if (err) {
                     reject(err);
                 } else {

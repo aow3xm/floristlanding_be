@@ -1,5 +1,5 @@
-import { Injectable } from '@nestjs/common';
-import { Request, Response } from 'express';
+import {Injectable} from '@nestjs/common';
+import {Request, Response} from 'express';
 
 enum CookieKey {
     ACCESS_TOKEN = 'access_token',
