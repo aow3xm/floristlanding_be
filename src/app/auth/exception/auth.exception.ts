@@ -1,15 +1,20 @@
-import {ConflictException, UnauthorizedException} from "@nestjs/common";
+import {ConflictException, HttpException, HttpStatus, UnauthorizedException} from "@nestjs/common";
 
-export class EmailExistedException extends ConflictException{
+export class EmailExistedException extends ConflictException {
     constructor() {
         super('Email has been existed.');
     }
 }
 
-export class InvalidCredentialsException extends UnauthorizedException{
+export class InvalidCredentialsException extends UnauthorizedException {
     constructor() {
         super('Invalid Credentials.');
 
     }
+}
 
+export class TooManyRequestsException extends HttpException {
+    constructor() {
+        super('Please be patient.', HttpStatus.TOO_MANY_REQUESTS);
+    }
 }
