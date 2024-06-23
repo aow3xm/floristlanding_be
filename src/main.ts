@@ -12,7 +12,7 @@ async function bootstrap() {
     app.useGlobalInterceptors(new ResponseInterceptor())
     app.use(cookieParser())
     app.useGlobalPipes(new ValidationPipe(validationOptions))
-    await app.listen(8080);
+    await app.listen(8080, '0.0.0.0');
 }
 
 bootstrap();
