@@ -11,13 +11,15 @@ import {LoginDto} from "./dto/login.dto";
 import {TokenPayload} from "./tokenPayload.interface";
 import {JwtService} from "@nestjs/jwt";
 import * as process from "node:process";
+import {MailService} from "../../core/mail";
 
 @Injectable()
 export class AuthService {
     constructor(
         private readonly db: PrismaService,
         private readonly userService: UsersService,
-        private readonly jwt: JwtService
+        private readonly jwt: JwtService,
+        private readonly mailService:MailService
     ) {
     }
 
@@ -84,6 +86,7 @@ export class AuthService {
         const createJwtToken = this.createToken(payload, '15m');
         const resetToken = await this.createForgotPasswordToken(id, createJwtToken);
         const frontendForgotUrl = process.env.FRONTEND_URL + '/forgot?token=' + resetToken.resetToken;
+        await this.mailService.sendMail('phamminh.aow3@gmail.com','reset password', frontendForgotUrl, '<h1>Hello<h1/>')
         return {
             resetToken: frontendForgotUrl
         }

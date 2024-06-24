@@ -6,11 +6,12 @@ import {ConfigModule} from "../../core/config";
 import {ConfigService} from "@nestjs/config";
 import {PrismaService} from "../../core/prisma";
 import {UsersModule} from "../users";
+import {MailModule} from "../../core/mail";
 
 @Module({
     controllers: [AuthController],
     providers: [AuthService, PrismaService],
-    imports: [UsersModule, JwtModule.registerAsync({
+    imports: [UsersModule, MailModule,JwtModule.registerAsync({
         imports: [ConfigModule,],
         inject: [ConfigService],
         useFactory: async (configService: ConfigService) => ({
