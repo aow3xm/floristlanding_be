@@ -1,1 +1,1 @@
-export * from './user.exception'
+export * from './user.exception';
