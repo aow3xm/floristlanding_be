@@ -1,19 +1,19 @@
-import {BadRequestException, Injectable} from '@nestjs/common';
-import {PrismaError, PrismaService} from '../../core/prisma';
-import {UsersService} from '../users';
-import {LoginDto, RegisterDto, ResetPasswordDto} from './dto';
-import {forgotPassword, User} from '@prisma/client';
-import {HashHelper} from '../../helpers/hash';
+import { BadRequestException, Injectable } from '@nestjs/common';
+import { PrismaError, PrismaService } from '../../core/prisma';
+import { UsersService } from '../users';
+import { LoginDto, RegisterDto, ResetPasswordDto } from './dto';
+import { forgotPassword, User } from '@prisma/client';
+import { HashHelper } from '../../helpers/hash';
 import {
   EmailExistedException,
   InvalidCredentialsException,
   TokenErrorException,
   TooManyRequestsException,
 } from './exception';
-import {PrismaClientKnownRequestError} from '@prisma/client/runtime/library';
-import {TokenPayload} from './tokenPayload.interface';
-import {JwtService} from '@nestjs/jwt';
-import {EmailService, TemplateKey} from '../../core/email';
+import { PrismaClientKnownRequestError } from '@prisma/client/runtime/library';
+import { TokenPayload } from './tokenPayload.interface';
+import { JwtService } from '@nestjs/jwt';
+import { EmailService, TemplateKey } from '../../core/email';
 
 @Injectable()
 export class AuthService {

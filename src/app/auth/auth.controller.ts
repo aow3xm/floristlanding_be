@@ -1,10 +1,10 @@
-import {Body, Controller, Post, Query} from '@nestjs/common';
-import {AuthService} from './auth.service';
-import {RegisterDto} from './dto/register.dto';
-import {User} from '@prisma/client';
-import {LoginDto} from './dto/login.dto';
-import {ForgotPasswordDto} from './dto/forgot-password.dto';
-import {ResetPasswordDto} from './dto';
+import { Body, Controller, Post, Query } from '@nestjs/common';
+import { AuthService } from './auth.service';
+import { RegisterDto } from './dto/register.dto';
+import { User } from '@prisma/client';
+import { LoginDto } from './dto/login.dto';
+import { ForgotPasswordDto } from './dto/forgot-password.dto';
+import { ResetPasswordDto } from './dto';
 
 @Controller('auth')
 export class AuthController {

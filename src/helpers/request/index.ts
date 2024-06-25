@@ -1,4 +1,4 @@
-import {Request} from 'express';
+import { Request } from 'express';
 
 export namespace RequestHelper {
   export const getRequest = async (request: Request): Promise<string> => {

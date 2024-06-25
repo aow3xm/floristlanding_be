@@ -1,4 +1,2 @@
 // eslint-disable-next-line @typescript-eslint/no-namespace
-export namespace Utils {
-
-}
+export namespace Utils {}

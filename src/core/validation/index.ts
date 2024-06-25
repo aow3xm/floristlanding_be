@@ -1,4 +1,4 @@
-import {ValidatorOptions} from 'class-validator';
+import { ValidatorOptions } from 'class-validator';
 
 interface ValidationPipeOptions extends ValidatorOptions {
   transform?: boolean;
