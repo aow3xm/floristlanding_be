@@ -26,25 +26,34 @@ model User {
 }
 
 model Plant {
-  id          String       @id @default(uuid())
-  color       PotColors    @default(White)
-  potSize     PotSizes     @default(medium)
+  id          String              @id @default(uuid())
+  color       PotColors           @default(White)
+  potSize     PotSizes            @default(medium)
   title       String
   description String
-  collection  Collection[]
-  createdAt   DateTime     @default(now())
-  updatedAt   DateTime     @updatedAt
+  createdAt   DateTime            @default(now())
+  updatedAt   DateTime            @updatedAt
   cartItems   CartItem[]
+  collections PlantOnCollection[]
 }
 
 model Collection {
-  id        String   @id @default(uuid())
+  id        String              @id @default(uuid())
   title     String
   species   String
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-  plantId   String
-  plant     Plant    @relation(fields: [plantId], references: [id])
+  createdAt DateTime            @default(now())
+  updatedAt DateTime            @updatedAt
+  plants    PlantOnCollection[]
+}
+
+model PlantOnCollection {
+  plant        Plant      @relation(fields: [plantId], references: [id])
+  plantId      String
+  collection   Collection @relation(fields: [collectionId], references: [id])
+  collectionId String
+  assignedAt   DateTime   @default(now())
+
+  @@id([plantId, collectionId])
 }
 
 model Cart {
