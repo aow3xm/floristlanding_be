@@ -6,9 +6,11 @@ import {
   Param,
   Patch,
   Post,
+  Query,
 } from '@nestjs/common';
 import { CollectionsService } from './collections.service';
 import { CreateCollectionDto, UpdateCollectionDto } from './dto';
+import { Collection } from '@prisma/client';
 
 @Controller('collections')
 export class CollectionsController {
@@ -20,12 +22,12 @@ export class CollectionsController {
   }
 
   @Get()
-  findAll() {
-    return this.collectionsService.findAll();
+  findAll(@Query('s') s?: string): Promise<Collection[]> {
+    return this.collectionsService.findAll(s);
   }
 
   @Get(':id')
-  findOne(@Param('id') id: string) {
+  findOne(@Param('id') id: string): Promise<Collection> {
     return this.collectionsService.findOneById(id);
   }
 
@@ -33,12 +35,12 @@ export class CollectionsController {
   update(
     @Param('id') id: string,
     @Body() updateCollectionDto: UpdateCollectionDto,
-  ) {
+  ): Promise<Collection> {
     return this.collectionsService.update(id, updateCollectionDto);
   }
 
   @Delete(':id')
-  remove(@Param('id') id: string) {
+  remove(@Param('id') id: string): Promise<Collection> {
     return this.collectionsService.remove(id);
   }
 }

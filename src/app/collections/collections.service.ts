@@ -17,8 +17,28 @@ export class CollectionsService {
     });
   }
 
-  findAll(): string {
-    return 'This action returns all collections';
+  async findAll(s?: string): Promise<Collection[]> {
+    if (!s) {
+      return await this.db.collection.findMany();
+    }
+    return await this.db.collection.findMany({
+      where: {
+        OR: [
+          {
+            title: {
+              contains: s,
+              mode: 'insensitive',
+            },
+          },
+          {
+            species: {
+              contains: s,
+              mode: 'insensitive',
+            },
+          },
+        ],
+      },
+    });
   }
 
   async findOneById(id: string): Promise<Collection> {
@@ -41,7 +61,11 @@ export class CollectionsService {
     });
   }
 
-  remove(id: string): string {
-    return `This action removes a #${id} collection`;
+  async remove(id: string): Promise<Collection> {
+    return await this.db.collection.delete({
+      where: {
+        id,
+      },
+    });
   }
 }
