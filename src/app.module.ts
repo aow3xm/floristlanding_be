@@ -7,6 +7,7 @@ import { EmailModule } from './core/email';
 import { ProductsModule } from './app/products';
 import { CollectionsModule } from './app/collections';
 import { PlantsCollectionsModule } from './app/plants-collections';
+import { CartModule } from './cart';
 
 @Module({
   imports: [
@@ -18,6 +19,7 @@ import { PlantsCollectionsModule } from './app/plants-collections';
     ProductsModule,
     CollectionsModule,
     PlantsCollectionsModule,
+    CartModule,
   ],
   providers: [AppService],
 })

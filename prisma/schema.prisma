@@ -19,10 +19,10 @@ model User {
   email          String          @unique
   password       String
   createdAt      DateTime        @default(now())
-  updateAt       DateTime        @updatedAt
+  updatedAt      DateTime        @updatedAt
   role           Roles           @default(User)
   cart           Cart[]
-  forgotPassword forgotPassword?
+  forgotPassword ForgotPassword?
 }
 
 model Plant {
@@ -33,7 +33,6 @@ model Plant {
   description String
   createdAt   DateTime            @default(now())
   updatedAt   DateTime            @updatedAt
-  cartItems   CartItem[]
   collections PlantOnCollection[]
 }
 
@@ -56,27 +55,26 @@ model PlantOnCollection {
   @@id([plantId, collectionId])
 }
 
+model Discount {
+  id           String        @id @default(uuid())
+  cartId       String
+  cart         Cart          @relation(fields: [cartId], references: [id])
+  type         DiscountTypes @default(Percent)
+  value        Int
+  discountCode String
+}
+
 model Cart {
   id        String     @id @default(uuid())
   userId    String
   user      User       @relation(fields: [userId], references: [id])
-  items     CartItem[]
+  quantity  Int        @default(1)
   createdAt DateTime   @default(now())
   updatedAt DateTime   @updatedAt
+  discount  Discount[]
 }
 
-model CartItem {
-  id        String   @id @default(uuid())
-  quantity  Int
-  plantId   String
-  plant     Plant    @relation(fields: [plantId], references: [id])
-  cartId    String
-  cart      Cart     @relation(fields: [cartId], references: [id])
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-}
-
-model forgotPassword {
+model ForgotPassword {
   id         String   @id @default(uuid())
   userId     String   @unique
   User       User     @relation(fields: [userId], references: [id])
@@ -102,4 +100,10 @@ enum PotColors {
 enum Roles {
   Admin
   User
+}
+
+enum DiscountTypes {
+  Percent
+  TotalPrice
+  PerPlant
 }

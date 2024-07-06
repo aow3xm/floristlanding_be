@@ -2,7 +2,7 @@ import { BadRequestException, Injectable } from '@nestjs/common';
 import { PrismaError, PrismaService } from '../../core/prisma';
 import { UsersService } from '../users';
 import { LoginDto, RegisterDto, ResetPasswordDto } from './dto';
-import { forgotPassword, User } from '@prisma/client';
+import { ForgotPassword, User } from '@prisma/client';
 import { HashHelper } from '../../helpers/hash';
 import {
   EmailExistedException,
@@ -134,14 +134,14 @@ export class AuthService {
     await this.db.forgotPassword.delete({ where: { userId } });
   }
 
-  async findResetPasswordToken(userId: string): Promise<forgotPassword | null> {
+  async findResetPasswordToken(userId: string): Promise<ForgotPassword | null> {
     return await this.db.forgotPassword.findUnique({ where: { userId } });
   }
 
   async createForgotPasswordToken(
     userId: string,
     resetToken: string,
-  ): Promise<forgotPassword> {
+  ): Promise<ForgotPassword> {
     return await this.db.forgotPassword.create({
       data: { userId, resetToken },
     });
