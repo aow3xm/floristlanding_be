@@ -17,7 +17,9 @@ export class CollectionsController {
   constructor(private readonly collectionsService: CollectionsService) {}
 
   @Post()
-  create(@Body() createCollectionDto: CreateCollectionDto) {
+  create(
+    @Body() createCollectionDto: CreateCollectionDto,
+  ): Promise<Collection> {
     return this.collectionsService.create(createCollectionDto);
   }
 

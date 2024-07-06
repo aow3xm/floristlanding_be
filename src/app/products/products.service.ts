@@ -1,14 +1,16 @@
-import {BadRequestException, Injectable} from '@nestjs/common';
+import { BadRequestException, Injectable } from '@nestjs/common';
 import { CreateProductDto, UpdateProductDto } from './dto/';
 import { PrismaService } from '../../core/prisma';
-import { Plant, PlantOnCollection, PotColors, PotSizes } from '@prisma/client';
+import { Plant, PotColors, PotSizes } from '@prisma/client';
 import { CollectionsService } from '../collections';
+import { PlantsCollectionsService } from '../plants-collections/plants-collections.service';
 
 @Injectable()
 export class ProductsService {
   constructor(
     private readonly db: PrismaService,
     private readonly collectionService: CollectionsService,
+    private readonly plantsCollectionsService: PlantsCollectionsService,
   ) {}
 
   async create(createProductDto: CreateProductDto): Promise<Plant> {
@@ -31,21 +33,15 @@ export class ProductsService {
     if (collectionIds && collectionIds.length > 0) {
       await Promise.all(
         collectionIds.map((collectionId) =>
-          this.addToCollection(newPlant.id, collectionId),
+          this.plantsCollectionsService.addToCollection(
+            newPlant.id,
+            collectionId,
+          ),
         ),
       );
     }
 
     return newPlant;
-  }
-
-  async addToCollection(
-    plantId: string,
-    collectionId: string,
-  ): Promise<PlantOnCollection> {
-    return this.db.plantOnCollection.create({
-      data: { plantId, collectionId },
-    });
   }
 
   async findAll(s?: string): Promise<Plant[]> {
