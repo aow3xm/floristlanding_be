@@ -19,9 +19,9 @@ export class CollectionsService {
 
   async findAll(s?: string): Promise<Collection[]> {
     if (!s) {
-      return await this.db.collection.findMany();
+      return this.db.collection.findMany({where:{deletedAt:null}});
     }
-    return await this.db.collection.findMany({
+    return this.db.collection.findMany({
       where: {
         OR: [
           {
@@ -37,13 +37,16 @@ export class CollectionsService {
             },
           },
         ],
+        AND: {
+          deletedAt: null,
+        },
       },
     });
   }
 
   async findOneById(id: string): Promise<Collection> {
     const foundCollection = await this.db.collection.findUnique({
-      where: { id },
+      where: { id, AND: { deletedAt: null } },
     });
     if (!foundCollection) {
       throw new CollectionNotFoundException(id);
@@ -55,17 +58,23 @@ export class CollectionsService {
     id: string,
     updateCollectionDto: UpdateCollectionDto,
   ): Promise<Collection> {
-    return this.db.collection.update({
+    const foundCollection = await this.findOneById(id);
+    if (!foundCollection) {
+      throw new CollectionNotFoundException(id);
+    }
+    return await this.db.collection.update({
       where: { id },
       data: { ...updateCollectionDto },
     });
   }
 
   async remove(id: string): Promise<Collection> {
-    return await this.db.collection.delete({
-      where: {
-        id,
-      },
+    const foundCollection = await this.findOneById(id);
+    if (!foundCollection || foundCollection.deletedAt) {
+      throw new CollectionNotFoundException(id);
+    }
+    return this.db.collection.delete({
+      where: { id },
     });
   }
 }
