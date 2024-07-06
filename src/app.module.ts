@@ -7,7 +7,7 @@ import { EmailModule } from './core/email';
 import { ProductsModule } from './app/products';
 import { CollectionsModule } from './app/collections';
 import { PlantsCollectionsModule } from './app/plants-collections';
-import { CartModule } from './cart';
+import { CartModule } from './app/cart';
 
 @Module({
   imports: [

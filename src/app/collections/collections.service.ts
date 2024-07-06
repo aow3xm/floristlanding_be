@@ -19,7 +19,7 @@ export class CollectionsService {
 
   async findAll(s?: string): Promise<Collection[]> {
     if (!s) {
-      return this.db.collection.findMany({where:{deletedAt:null}});
+      return this.db.collection.findMany({ where: { deletedAt: null } });
     }
     return this.db.collection.findMany({
       where: {
