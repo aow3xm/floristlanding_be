@@ -6,18 +6,22 @@ import {
   Param,
   Patch,
   Post,
+  UseGuards,
 } from '@nestjs/common';
 import { CartService } from './cart.service';
 import { CreateCartDto } from './dto/create.dto';
 import { UpdateCartDto } from './dto/update.dto';
+import { GetUser, JwtGuard } from '../auth';
+import { TokenPayload } from '../auth/tokenPayload.interface';
 
+@UseGuards(JwtGuard)
 @Controller('cart')
 export class CartController {
   constructor(private readonly cartService: CartService) {}
 
   @Post()
-  create(@Body() createCartDto: CreateCartDto) {
-    return this.cartService.create(createCartDto);
+  create(@GetUser() user: TokenPayload, @Body() createCartDto: CreateCartDto) {
+    return this.cartService.create(user, createCartDto);
   }
 
   @Get()
@@ -27,16 +31,16 @@ export class CartController {
 
   @Get(':id')
   findOne(@Param('id') id: string) {
-    return this.cartService.findOne(+id);
+    return this.cartService.findOne(id);
   }
 
   @Patch(':id')
   update(@Param('id') id: string, @Body() updateCartDto: UpdateCartDto) {
-    return this.cartService.update(+id, updateCartDto);
+    return this.cartService.update(id, updateCartDto);
   }
 
   @Delete(':id')
   remove(@Param('id') id: string) {
-    return this.cartService.remove(+id);
+    return this.cartService.remove(id);
   }
 }
