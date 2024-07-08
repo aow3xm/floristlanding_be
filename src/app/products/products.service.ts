@@ -3,7 +3,8 @@ import { CreateProductDto, UpdateProductDto } from './dto/';
 import { PrismaService } from '../../core/prisma';
 import { Plant, PotColors, PotSizes } from '@prisma/client';
 import { CollectionsService } from '../collections';
-import { PlantsCollectionsService } from '../plants-collections/plants-collections.service';
+import { PlantsCollectionsService } from '../plants-collections';
+import { ProductNotFoundException } from './exception/products.exception';
 
 @Injectable()
 export class ProductsService {
@@ -76,11 +77,14 @@ export class ProductsService {
   }
 
   async findOne(id: string): Promise<Plant> {
-    return await this.db.plant.findUnique({
-      where: {
-        id,
-      },
+    const foundProduct = await this.db.plant.findUnique({
+      where: { id },
     });
+
+    if (!foundProduct) {
+      throw new ProductNotFoundException(id);
+    }
+    return foundProduct;
   }
 
   async update(id: string, updateProductDto: UpdateProductDto): Promise<Plant> {
