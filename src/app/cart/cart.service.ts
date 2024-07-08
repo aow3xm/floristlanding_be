@@ -2,13 +2,22 @@ import { Injectable } from '@nestjs/common';
 import { CreateCartDto, UpdateCartDto } from './dto';
 import { PrismaService } from '../../core/prisma';
 import { TokenPayload } from '../auth/tokenPayload.interface';
+import { ProductsService } from '../products';
 
 @Injectable()
 export class CartService {
-  constructor(private readonly db: PrismaService) {}
-  create(user: TokenPayload, createCartDto: CreateCartDto) {
-    console.log(user, createCartDto);
-    return 'This action adds a new cart';
+  constructor(
+    private readonly db: PrismaService,
+    private readonly productService: ProductsService,
+  ) {}
+  async create(user: TokenPayload, createCartDto: CreateCartDto) {
+    await this.productService.findOne(createCartDto.plantId);
+    await this.db.cart.create({
+      data: {
+        userId: user.userId,
+        ...createCartDto,
+      },
+    });
   }
 
   findAll() {

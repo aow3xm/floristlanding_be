@@ -9,8 +9,7 @@ import {
   UseGuards,
 } from '@nestjs/common';
 import { CartService } from './cart.service';
-import { CreateCartDto } from './dto/create.dto';
-import { UpdateCartDto } from './dto/update.dto';
+import { CreateCartDto, UpdateCartDto } from './dto';
 import { GetUser, JwtGuard } from '../auth';
 import { TokenPayload } from '../auth/tokenPayload.interface';
 
