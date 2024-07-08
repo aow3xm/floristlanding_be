@@ -3,6 +3,9 @@ import { CreateCartDto, UpdateCartDto } from './dto';
 import { PrismaService } from '../../core/prisma';
 import { TokenPayload } from '../auth/tokenPayload.interface';
 import { ProductsService } from '../products';
+import { Cart } from '@prisma/client';
+import { CartNotFoundException } from './exception';
+import { NoPermissionException } from '../../core/exception/no-permission.exception';
 
 @Injectable()
 export class CartService {
@@ -10,9 +13,13 @@ export class CartService {
     private readonly db: PrismaService,
     private readonly productService: ProductsService,
   ) {}
-  async create(user: TokenPayload, createCartDto: CreateCartDto) {
+
+  async create(
+    user: TokenPayload,
+    createCartDto: CreateCartDto,
+  ): Promise<Cart> {
     await this.productService.findOne(createCartDto.plantId);
-    await this.db.cart.create({
+    return await this.db.cart.create({
       data: {
         userId: user.userId,
         ...createCartDto,
@@ -20,20 +27,49 @@ export class CartService {
     });
   }
 
-  findAll() {
-    return `This action returns all cart`;
+  async findAll(user: TokenPayload): Promise<Cart[]> {
+    return await this.db.cart.findMany({
+      where: { userId: user.userId },
+    });
   }
 
-  findOne(id: string) {
-    return `This action returns a #${id} cart`;
+  async findOne(id: string): Promise<Cart> {
+    const foundCart = await this.db.cart.findFirst({
+      where: { id },
+    });
+    if (!foundCart) {
+      throw new CartNotFoundException(id);
+    }
+    return foundCart;
   }
 
-  update(id: string, updateCartDto: UpdateCartDto) {
-    console.log(updateCartDto);
-    return `This action updates a #${id} cart`;
+  async update(
+    id: string,
+    user: TokenPayload,
+    updateCartDto: UpdateCartDto,
+  ): Promise<Cart> {
+    const foundCart = await this.findOne(id);
+
+    if (user.role !== 'Admin' && foundCart.userId !== user.userId) {
+      throw new NoPermissionException();
+    }
+
+    return await this.db.cart.update({
+      where: { id },
+      data: { ...updateCartDto },
+    });
   }
 
-  remove(id: string) {
-    return `This action removes a #${id} cart`;
+  async remove(id: string, user: TokenPayload): Promise<Cart> {
+    const foundCart = await this.findOne(id);
+    if (foundCart.deletedAt) {
+      throw new CartNotFoundException(id);
+    }
+    if (user.role !== 'Admin' && foundCart.userId !== user.userId) {
+      throw new NoPermissionException();
+    }
+    return await this.db.cart.delete({
+      where: { id },
+    });
   }
 }
