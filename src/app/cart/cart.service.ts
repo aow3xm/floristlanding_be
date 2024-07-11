@@ -5,7 +5,7 @@ import { TokenPayload } from '../auth/tokenPayload.interface';
 import { ProductsService } from '../products';
 import { Cart } from '@prisma/client';
 import { CartNotFoundException } from './exception';
-import { NoPermissionException } from '../../core/exception/no-permission.exception';
+import { NoPermissionException } from '../../core/exception';
 
 @Injectable()
 export class CartService {
@@ -18,11 +18,12 @@ export class CartService {
     user: TokenPayload,
     createCartDto: CreateCartDto,
   ): Promise<Cart> {
-    await this.productService.findOne(createCartDto.plantId);
+    const foundProduct =  await this.productService.findOne(createCartDto.plantId);
     return await this.db.cart.create({
       data: {
         userId: user.userId,
         ...createCartDto,
+        price: foundProduct.price * createCartDto.quantity
       },
     });
   }

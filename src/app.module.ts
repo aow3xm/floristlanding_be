@@ -8,6 +8,7 @@ import { ProductsModule } from './app/products';
 import { CollectionsModule } from './app/collections';
 import { PlantsCollectionsModule } from './app/plants-collections';
 import { CartModule } from './app/cart';
+import { OrdersModule } from './app/orders/orders.module';
 
 @Module({
   imports: [
@@ -20,6 +21,7 @@ import { CartModule } from './app/cart';
     CollectionsModule,
     PlantsCollectionsModule,
     CartModule,
+    OrdersModule,
   ],
   providers: [AppService],
 })
