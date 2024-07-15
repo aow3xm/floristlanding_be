@@ -2,11 +2,12 @@ import { PotColors, PotSizes } from '@prisma/client';
 import {
   IsArray,
   IsEnum,
-  IsNotEmpty, IsNumber,
+  IsNotEmpty,
+  IsNumber,
   IsOptional,
-  IsString
-} from "class-validator";
-import { Type } from "class-transformer";
+  IsString,
+} from 'class-validator';
+import { Type } from 'class-transformer';
 
 export class CreateProductDto {
   @IsNotEmpty()
@@ -31,6 +32,6 @@ export class CreateProductDto {
 
   @IsNotEmpty()
   @IsNumber()
-  @Type(()=>Number)
-  price:number;
+  @Type(() => Number)
+  price: number;
 }

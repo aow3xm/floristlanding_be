@@ -10,15 +10,18 @@ import {
 import { OrdersService } from './orders.service';
 import { CreateOrderDto } from './dto/create-order.dto';
 import { UpdateOrderDto } from './dto/update-order.dto';
-import { GetUser } from "../auth";
-import { TokenPayload } from "../auth/tokenPayload.interface";
+import { GetUser } from '../auth';
+import { TokenPayload } from '../auth/tokenPayload.interface';
 
 @Controller('orders')
 export class OrdersController {
   constructor(private readonly ordersService: OrdersService) {}
 
   @Post()
-  create(@GetUser() user:TokenPayload, @Body() createOrderDto: CreateOrderDto) {
+  create(
+    @GetUser() user: TokenPayload,
+    @Body() createOrderDto: CreateOrderDto,
+  ) {
     return this.ordersService.create(user, createOrderDto);
   }
 
