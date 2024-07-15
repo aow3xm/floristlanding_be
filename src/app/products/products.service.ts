@@ -45,9 +45,16 @@ export class ProductsService {
     return newPlant;
   }
 
-  async findAll(s?: string): Promise<Plant[]> {
+  async findAll(
+    s?: string,
+    page: number = 1,
+    limit: number = 10,
+  ): Promise<Plant[]> {
     if (!s) {
-      return this.db.plant.findMany();
+      return this.db.plant.findMany({
+        skip: (page - 1) * limit,
+        take: limit,
+      });
     }
 
     const isString = (value: any): value is string => typeof value === 'string';
@@ -73,6 +80,8 @@ export class ProductsService {
       where: {
         OR: filters,
       },
+      skip: (page - 1) * limit,
+      take: limit,
     });
   }
 

@@ -22,8 +22,12 @@ export class ProductsController {
   }
 
   @Get()
-  findAll(@Query('s') s?: string): Promise<Plant[]> {
-    return this.productsService.findAll(s);
+  findAll(
+    @Query('s') s?: string,
+    @Query('page') page?: number,
+    @Query('limit') limit?: number,
+  ): Promise<Plant[]> {
+    return this.productsService.findAll(s, page, limit);
   }
 
   @Get(':id')
