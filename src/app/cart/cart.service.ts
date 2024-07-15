@@ -18,19 +18,29 @@ export class CartService {
     user: TokenPayload,
     createCartDto: CreateCartDto,
   ): Promise<Cart> {
-    const foundProduct =  await this.productService.findOne(createCartDto.plantId);
+    const foundProduct = await this.productService.findOne(
+      createCartDto.plantId,
+    );
     return await this.db.cart.create({
       data: {
         userId: user.userId,
         ...createCartDto,
-        price: foundProduct.price * createCartDto.quantity
+        price: foundProduct.price * createCartDto.quantity,
       },
     });
   }
 
-  async findAll(user: TokenPayload): Promise<Cart[]> {
+  async findAll(
+    user: TokenPayload,
+    page: number = 1,
+    limit: number = 10,
+  ): Promise<Cart[]> {
+    const skip = (page - 1) * limit;
+
     return await this.db.cart.findMany({
       where: { userId: user.userId },
+      skip: skip,
+      take: limit,
     });
   }
 

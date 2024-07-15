@@ -6,6 +6,7 @@ import {
   Param,
   Patch,
   Post,
+  Query,
   UseGuards,
 } from '@nestjs/common';
 import { CartService } from './cart.service';
@@ -28,8 +29,12 @@ export class CartController {
   }
 
   @Get()
-  async findAll(@GetUser() user: TokenPayload): Promise<Cart[]> {
-    return await this.cartService.findAll(user);
+  async findAll(
+    @GetUser() user: TokenPayload,
+    @Query('page') page?: number,
+    @Query('limit') limit?: number,
+  ): Promise<Cart[]> {
+    return await this.cartService.findAll(user, page, limit);
   }
 
   @Get(':id')
