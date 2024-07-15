@@ -17,10 +17,21 @@ export class CollectionsService {
     });
   }
 
-  async findAll(s?: string): Promise<Collection[]> {
+  async findAll(
+    s?: string,
+    page: number = 1,
+    limit: number = 10,
+  ): Promise<Collection[]> {
+    const skip = (page - 1) * limit;
+
     if (!s) {
-      return this.db.collection.findMany({ where: { deletedAt: null } });
+      return this.db.collection.findMany({
+        where: { deletedAt: null },
+        skip: skip,
+        take: limit,
+      });
     }
+
     return this.db.collection.findMany({
       where: {
         OR: [
@@ -41,6 +52,8 @@ export class CollectionsService {
           deletedAt: null,
         },
       },
+      skip: skip,
+      take: limit,
     });
   }
 

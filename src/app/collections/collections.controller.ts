@@ -29,8 +29,12 @@ export class CollectionsController {
 
   @Public()
   @Get()
-  findAll(@Query('s') s?: string): Promise<Collection[]> {
-    return this.collectionsService.findAll(s);
+  findAll(
+    @Query('s') s?: string,
+    @Query('page') page?: number,
+    @Query('limit') limit?: number,
+  ): Promise<Collection[]> {
+    return this.collectionsService.findAll(s, page, limit);
   }
 
   @Role('Admin')
