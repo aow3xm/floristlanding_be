@@ -27,20 +27,22 @@ model Plant {
   potSize     PotSizes            @default(Medium)
   title       String
   description String
-  createdAt   DateTime            @default(now())
-  updatedAt   DateTime            @updatedAt
   stock       Int                 @default(1)
   price       Int
-  deletedAt   DateTime?
   cart        Cart[]
   orders      Order[]
   collections PlantOnCollection[]
+  image       String?
+  createdAt   DateTime            @default(now())
+  updatedAt   DateTime            @updatedAt
+  deletedAt   DateTime?
 }
 
 model Collection {
   id        String              @id @default(uuid())
   title     String
   species   String
+  image     String?
   createdAt DateTime            @default(now())
   updatedAt DateTime            @updatedAt
   deletedAt DateTime?

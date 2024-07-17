@@ -8,7 +8,8 @@ import { ProductsModule } from './app/products';
 import { CollectionsModule } from './app/collections';
 import { PlantsCollectionsModule } from './app/plants-collections';
 import { CartModule } from './app/cart';
-import { OrdersModule } from './app/orders/orders.module';
+import { OrdersModule } from './app/orders';
+import { UploadModule } from './core/upload';
 
 @Module({
   imports: [
@@ -22,6 +23,7 @@ import { OrdersModule } from './app/orders/orders.module';
     PlantsCollectionsModule,
     CartModule,
     OrdersModule,
+    UploadModule,
   ],
   providers: [AppService],
 })

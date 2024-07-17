@@ -30,6 +30,17 @@ export namespace FileHelper {
     });
   };
 
+  export const createFolder = (folderPath: string): Promise<void> => {
+    return new Promise((resolve, reject) => {
+      try {
+        fs.mkdirSync(folderPath, { recursive: true });
+        resolve();
+      } catch (err) {
+        reject(err);
+      }
+    });
+  };
+
   export const getFile = (filePath: string): Promise<string> => {
     return new Promise((resolve, reject) => {
       fs.readFile(filePath, 'utf8', (err, data) => {

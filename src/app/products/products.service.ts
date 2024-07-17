@@ -5,6 +5,7 @@ import { Plant, PotColors, PotSizes } from '@prisma/client';
 import { CollectionsService } from '../collections';
 import { PlantsCollectionsService } from '../plants-collections';
 import { ProductNotFoundException } from './exception/products.exception';
+import { UploadService } from '../../core/upload';
 
 @Injectable()
 export class ProductsService {
@@ -12,7 +13,9 @@ export class ProductsService {
     private readonly db: PrismaService,
     private readonly collectionService: CollectionsService,
     private readonly plantsCollectionsService: PlantsCollectionsService,
+    private readonly uploadService: UploadService,
   ) {}
+  private uploadPath = 'products';
 
   async create(createProductDto: CreateProductDto): Promise<Plant> {
     const { collectionIds, ...plantData } = createProductDto;
@@ -103,6 +106,17 @@ export class ProductsService {
       },
       data: {
         ...updateProductDto,
+      },
+    });
+  }
+
+  async updateImage(id: string, file: Express.Multer.File):Promise<Plant> {
+    await this.findOne(id);
+    const upload = await this.uploadService.uploadFile(file, this.uploadPath);
+    return await this.db.plant.update({
+      where: { id },
+      data: {
+        image: upload.path,
       },
     });
   }
